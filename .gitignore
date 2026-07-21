@@ -3,4 +3,4 @@ test-results/
 test-data/ 
 reports/
 storage/
-env/
+config/env/.env*
