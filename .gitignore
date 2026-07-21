@@ -4,3 +4,4 @@ test-data/
 reports/
 storage/
 config/env/.env*
+!config/env/.env.example
