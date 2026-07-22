@@ -1,5 +1,5 @@
-import { test, expect } from '../../../fixtures/test-fixtures';
-import { env } from '../../../utils/env';
+import { test, expect } from '../../../src/fixtures/test-fixtures';
+import { env } from '../../../src/utils/env';
 
 
 test('valid user should see inventory list', async ({ loginPage, inventoryPage, page }) => {
