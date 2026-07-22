@@ -8,11 +8,11 @@
     "test:smoke": "npx playwright test --grep @smoke",
     "test:regression": "npx playwright test --grep @regression",
     "test:headed": "npx playwright test --headed",
-    "test:ui": "npx playwright test tests/ui",
+    "test:ui": "cross-env ENV_NAME=qa npx playwright test tests/ui",
     "test:api": "npx playwright test tests/api",
     "report": "npx playwright show-report",
-    "test:dev": "ENV_NAME=dev npx playwright test",
-    "test:qa": "ENV_NAME=qa npx playwright test",
+    "test:dev": "cross-env ENV_NAME=dev npx playwright test",
+    "test:qa": "cross-env ENV_NAME=qa npx playwright test"
   },
   "keywords": [],
   "author": "",
@@ -20,8 +20,12 @@
   "type": "commonjs",
   "devDependencies": {
     "@playwright/test": "^1.61.1",
+    "cross-env": "^10.1.0",
     "dotenv": "^17.4.2",
     "ts-node": "^10.9.2",
     "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "allure-playwright": "^3.10.2"
   }
 }
