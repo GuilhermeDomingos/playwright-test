@@ -2,7 +2,7 @@ import * as dotenv from 'dotenv';
 import * as path from 'path';
 
 const ENV_NAME = process.env.ENV_NAME || 'dev';
-const envFile = path.resolve(__dirname, `../config/env/.env.${ENV_NAME}`);
+const envFile = path.resolve(__dirname, `../../config/env/.env.${ENV_NAME}`);
 dotenv.config({ path: envFile, override: true });
 
 function required(name: string, fallback?: string): string {
