@@ -1,7 +1,40 @@
+# Dependencies
 node_modules/
-test-results/
-test-data/ 
-reports/
-storage/
+
+# Environment files
 config/env/.env*
 !config/env/.env.example
+
+# Playwright artifacts
+test-results/
+playwright-report/
+blob-report/
+
+# Allure artifacts
+allure-results/
+allure-report/
+
+# Project output folders
+reports/
+storage/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build/cache output
+dist/
+build/
+coverage/
+.cache/
+.nyc_output/
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
