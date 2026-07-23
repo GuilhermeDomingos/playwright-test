@@ -1,13 +1,28 @@
-name: Playwright UI Tests
+name: Playwright Tests
 
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: Test suite to run
+        required: true
+        default: smoke
+        type: choice
+        options:
+          - smoke
+          - regression
+          - login
+          - cart
+          - checkout
+          - ui
+          - e2e
 
 jobs:
-  ui-tests:
+  playwright-tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,7 +44,7 @@ jobs:
           echo "BASE_URL=${{ secrets.QA_BASE_URL }}" > config/env/.env.qa
           API_URL="${{ secrets.QA_API_URL }}"
           if [ -z "$API_URL" ]; then
-          API_URL="${{ secrets.QA_BASE_URL }}"  
+            API_URL="${{ secrets.QA_BASE_URL }}"
           fi
           echo "API_URL=$API_URL" >> config/env/.env.qa
           echo "USERNAME=${{ secrets.QA_USERNAME }}" >> config/env/.env.qa
@@ -39,14 +54,28 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
-      - name: Run UI tests
-        run: npm run test:ui
+      - name: Select test suite
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "TEST_SUITE=smoke" >> "$GITHUB_ENV"
+            echo "TEST_COMMAND=npm run test:smoke" >> "$GITHUB_ENV"
+          elif [ "${{ github.event_name }}" = "push" ]; then
+            echo "TEST_SUITE=regression" >> "$GITHUB_ENV"
+            echo "TEST_COMMAND=npm run test:regression" >> "$GITHUB_ENV"
+          else
+            SUITE="${{ github.event.inputs.suite }}"
+            echo "TEST_SUITE=$SUITE" >> "$GITHUB_ENV"
+            echo "TEST_COMMAND=npm run test:$SUITE" >> "$GITHUB_ENV"
+          fi
+
+      - name: Run selected tests
+        run: $TEST_COMMAND
 
       - name: Upload Playwright report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: playwright-report-${{ env.TEST_SUITE }}
           path: playwright-report/
           retention-days: 7
 
@@ -54,7 +83,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-results
+          name: test-results-${{ env.TEST_SUITE }}
           path: test-results/
           retention-days: 7
 
@@ -62,6 +91,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results
+          name: allure-results-${{ env.TEST_SUITE }}
           path: allure-results/
           retention-days: 7

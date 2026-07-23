@@ -14,7 +14,7 @@ test.describe('Checkout Information', () => {
         await expect(checkoutInformationPage.title).toHaveText('Checkout: Your Information');
     });
 
-    test('should display checkout information page', async ({checkoutInformationPage}) => {
+    test('should display checkout information page @ui @regression @checkout', async ({checkoutInformationPage}) => {
         await expect(checkoutInformationPage.title).toBeVisible();
         await expect(checkoutInformationPage.title).toHaveText('Checkout: Your Information');
         await expect(checkoutInformationPage.firstNameField).toBeVisible();
@@ -30,7 +30,7 @@ test.describe('Checkout Information', () => {
         await expect(checkoutInformationPage.cartBadge).toHaveText('1');
     });
 
-    test('should continue to checkout overview with valid information', async ({checkoutInformationPage, page}) => {
+    test('should continue to checkout overview with valid information @ui @regression @checkout', async ({checkoutInformationPage, page}) => {
         const checkoutData = generateCheckoutFormData();
 
         await checkoutInformationPage.fillCheckoutInformation(
@@ -44,7 +44,7 @@ test.describe('Checkout Information', () => {
         await expect(checkoutInformationPage.title).toHaveText('Checkout: Overview');
     });
 
-    test('should show error when first name is missing', async ({checkoutInformationPage}) => {
+    test('should show error when first name is missing @ui @regression @checkout', async ({checkoutInformationPage}) => {
         const checkoutData = generateCheckoutFormData();
 
         await checkoutInformationPage.fillCheckoutInformation('', checkoutData.lastName, checkoutData.postalCode);
@@ -54,7 +54,7 @@ test.describe('Checkout Information', () => {
         await expect(checkoutInformationPage.errorMessage).toHaveText('Error: First Name is required');
     });
 
-    test('should show error when last name is missing', async ({checkoutInformationPage}) => {
+    test('should show error when last name is missing @ui @regression @checkout', async ({checkoutInformationPage}) => {
         const checkoutData = generateCheckoutFormData();
 
         await checkoutInformationPage.fillCheckoutInformation(checkoutData.firstName, '', checkoutData.postalCode);
@@ -64,7 +64,7 @@ test.describe('Checkout Information', () => {
         await expect(checkoutInformationPage.errorMessage).toHaveText('Error: Last Name is required');
     });
 
-    test('should show error when postal code is missing', async ({checkoutInformationPage}) => {
+    test('should show error when postal code is missing @ui @regression @checkout', async ({checkoutInformationPage}) => {
         const checkoutData = generateCheckoutFormData();
 
         await checkoutInformationPage.fillCheckoutInformation(checkoutData.firstName, checkoutData.lastName, '');
@@ -74,7 +74,7 @@ test.describe('Checkout Information', () => {
         await expect(checkoutInformationPage.errorMessage).toHaveText('Error: Postal Code is required');
     });
 
-    test('should return to cart when cancel is clicked', async ({checkoutInformationPage, cartPage, page}) => {
+    test('should return to cart when cancel is clicked @ui @regression @checkout @cart', async ({checkoutInformationPage, cartPage, page}) => {
         await checkoutInformationPage.clickCancel();
 
         await expect(page).toHaveURL(/cart/);

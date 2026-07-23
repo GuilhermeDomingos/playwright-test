@@ -2,7 +2,7 @@ import { test, expect } from '../../../src/fixtures/test-fixtures';
 import { env } from '../../../src/utils/env';
 
 
-test('valid user should see inventory list', async ({ loginPage, inventoryPage, page }) => {
+test('valid user should see inventory list @ui @regression @inventory', async ({ loginPage, inventoryPage, page }) => {
     await loginPage.goto();
     await loginPage.login(env.USERNAME, env.PASSWORD);
     await expect(page).toHaveURL(/inventory/);
