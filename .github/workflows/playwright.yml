@@ -31,6 +31,7 @@ jobs:
           if [ -z "$API_URL" ]; then
           API_URL="${{ secrets.QA_BASE_URL }}"  
           fi
+          echo "API_URL=$API_URL" >> config/env/.env.qa
           echo "USERNAME=${{ secrets.QA_USERNAME }}" >> config/env/.env.qa
           echo "PASSWORD=${{ secrets.QA_PASSWORD }}" >> config/env/.env.qa
           echo "HEADLESS=true" >> config/env/.env.qa
