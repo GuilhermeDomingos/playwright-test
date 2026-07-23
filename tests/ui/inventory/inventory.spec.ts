@@ -8,4 +8,12 @@ test('valid user should see inventory list', async ({ loginPage, inventoryPage, 
     await expect(page).toHaveURL(/inventory/);
     await expect(inventoryPage.title).toHaveText('Products');
     await expect(inventoryPage.inventoryItems).toHaveCount(6);
+    await expect(inventoryPage.imageProduct).toBeVisible();
+    await expect(inventoryPage.addToCartButtons.first()).toHaveText('Add to cart');
+    await expect(inventoryPage.cartlink).toBeVisible();
+    await inventoryPage.addBackpackToCart();
+    await expect(inventoryPage.cartBadge).toHaveText('1');
+
 });
+
+
