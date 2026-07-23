@@ -27,6 +27,10 @@ jobs:
         run: |
           mkdir -p config/env
           echo "BASE_URL=${{ secrets.QA_BASE_URL }}" > config/env/.env.qa
+          API_URL="${{ secrets.QA_API_URL }}"
+          if [ -z "$API_URL" ]; then
+          API_URL="${{ secrets.QA_BASE_URL }}"  
+          fi
           echo "USERNAME=${{ secrets.QA_USERNAME }}" >> config/env/.env.qa
           echo "PASSWORD=${{ secrets.QA_PASSWORD }}" >> config/env/.env.qa
           echo "HEADLESS=true" >> config/env/.env.qa
