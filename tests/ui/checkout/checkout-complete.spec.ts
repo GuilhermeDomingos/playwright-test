@@ -33,7 +33,7 @@ test.describe('Checkout Complete', () => {
         await expect(checkoutCompletePage.title).toHaveText('Checkout: Complete!');
     });
 
-    test('should display checkout complete page', async ({checkoutCompletePage, page}) => {
+    test('should display checkout complete page @ui @regression @checkout', async ({checkoutCompletePage, page}) => {
         await expect(page).toHaveURL(/checkout-complete/);
         await expect(checkoutCompletePage.title).toBeVisible();
         await expect(checkoutCompletePage.title).toHaveText('Checkout: Complete!');
@@ -48,7 +48,7 @@ test.describe('Checkout Complete', () => {
         await expect(checkoutCompletePage.btnGeneratePdfOrder).toHaveText('Generate PDF order');
     });
 
-    test('should return to inventory when back home is clicked', async ({
+    test('should return to inventory when back home is clicked @ui @regression @checkout @inventory', async ({
         checkoutCompletePage,
         inventoryPage,
         page,
@@ -59,7 +59,7 @@ test.describe('Checkout Complete', () => {
         await expect(inventoryPage.title).toHaveText('Products');
     });
 
-    test('should keep cart empty after order is completed', async ({checkoutCompletePage, cartPage}) => {
+    test('should keep cart empty after order is completed @ui @regression @checkout @cart', async ({checkoutCompletePage, cartPage}) => {
         await expect(checkoutCompletePage.cartBadge).not.toBeVisible();
 
         await checkoutCompletePage.clickCartLink();
@@ -69,7 +69,7 @@ test.describe('Checkout Complete', () => {
         await expect(cartPage.itemQuantity).toHaveCount(0);
     });
 
-    test('should keep generate pdf order button available', async ({checkoutCompletePage}) => {
+    test('should keep generate pdf order button available @ui @regression @checkout', async ({checkoutCompletePage}) => {
         await expect(checkoutCompletePage.btnGeneratePdfOrder).toBeVisible();
         await expect(checkoutCompletePage.btnGeneratePdfOrder).toHaveText('Generate PDF order');
         await expect(checkoutCompletePage.btnGeneratePdfOrder).toBeEnabled();

@@ -29,9 +29,12 @@ It uses the Page Object Model, custom fixtures, environment-based configuration,
 |   |-- pages/
 |   `-- utils/
 |-- tests/
+|   |-- e2e/
 |   |-- setup/
+|   |-- smoke/
 |   `-- ui/
 |       |-- cart/
+|       |-- checkout/
 |       |-- inventory/
 |       `-- login/
 |-- playwright.config.ts
@@ -114,6 +117,18 @@ Run UI tests against QA:
 npm run test:ui
 ```
 
+Run E2E tests against QA:
+
+```bash
+npm run test:e2e
+```
+
+Open E2E tests in Playwright UI mode:
+
+```bash
+npm run test:e2e:ui
+```
+
 Run tests against DEV:
 
 ```bash
@@ -138,10 +153,24 @@ Run smoke tests:
 npm run test:smoke
 ```
 
+Open smoke tests in Playwright UI mode:
+
+```bash
+npm run test:smoke:ui
+```
+
 Run regression tests:
 
 ```bash
 npm run test:regression
+```
+
+Run tests by feature:
+
+```bash
+npm run test:login
+npm run test:cart
+npm run test:checkout
 ```
 
 ## Reports
@@ -170,15 +199,29 @@ The project includes a GitHub Actions workflow:
 .github/workflows/playwright.yml
 ```
 
-The CI runs on:
+The CI runs by test suite tag depending on the event:
 
-- push to `main`
-- pull requests targeting `main`
+- pull requests targeting `main`: smoke tests.
+- push to `main`: regression tests.
+- manual execution with `workflow_dispatch`: selected suite.
 
-It executes:
+Automatic executions:
 
 ```bash
-npm run test:ui
+npm run test:smoke
+npm run test:regression
+```
+
+Manual execution supports these suites:
+
+```txt
+smoke
+regression
+login
+cart
+checkout
+ui
+e2e
 ```
 
 Required GitHub Secrets:
@@ -190,7 +233,7 @@ QA_USERNAME
 QA_PASSWORD
 ```
 
-The workflow creates `config/env/.env.qa` during execution and uploads Playwright and Allure artifacts.
+The workflow creates `config/env/.env.qa` during execution and uploads Playwright and Allure artifacts using the suite name, for example `playwright-report-smoke` or `allure-results-regression`.
 
 ## Test Design Guidelines
 
@@ -200,14 +243,44 @@ The workflow creates `config/env/.env.qa` during execution and uploads Playwrigh
 - Keep `expect` assertions inside test files.
 - Use fixtures to provide reusable page instances.
 - Group tests by feature under `tests/ui`.
+- Group end-to-end journeys under `tests/e2e`.
+- Group smoke checks under `tests/smoke`.
 - Prefer readable behavior-based test names.
 
 Example:
 
 ```txt
+tests/e2e/purchase-flow.spec.ts
+tests/smoke/smoke.spec.ts
 tests/ui/cart/cart.spec.ts
 tests/ui/inventory/inventory.spec.ts
 tests/ui/login/authentication.spec.ts
+```
+
+## Test Tags
+
+Tests use tags in their titles to support selective execution with Playwright `--grep`.
+
+Main tags:
+
+```txt
+@smoke
+@regression
+@ui
+@e2e
+@login
+@inventory
+@cart
+@checkout
+```
+
+Examples:
+
+```bash
+npm run test:smoke
+npm run test:regression
+npm run test:checkout
+npx playwright test --grep "@ui"
 ```
 
 ## Useful Commands
