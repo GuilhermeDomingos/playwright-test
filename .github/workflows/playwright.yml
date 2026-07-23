@@ -1,0 +1,62 @@
+name: Playwright UI Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  ui-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create QA env file
+        run: |
+          mkdir -p config/env
+          echo "BASE_URL=${{ secrets.QA_BASE_URL }}" > config/env/.env.qa
+          echo "USERNAME=${{ secrets.QA_USERNAME }}" >> config/env/.env.qa
+          echo "PASSWORD=${{ secrets.QA_PASSWORD }}" >> config/env/.env.qa
+          echo "HEADLESS=true" >> config/env/.env.qa
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Run UI tests
+        run: npm run test:ui
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: test-results/
+          retention-days: 7
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results/
+          retention-days: 7
